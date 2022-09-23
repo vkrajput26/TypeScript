@@ -1,9 +1,9 @@
 import { title } from 'process';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import TodoInput from './TodoInput';
 import TodoItem from './TodoItem';
-
+import axios from "axios"
 export interface ITodoItem{
     id:number;
     title:string;
@@ -18,8 +18,20 @@ const Todo = () => {
             title,
             status:false,
         }
-        setTodos([...todos,payload])
+        // setTodos([...todos,payload])
+        axios.post("http://localhost:3000/todo",payload).then(getTodos)
     }
+
+    const getTodos=()=>{
+        axios.get("http://localhost:3000/todo")
+        .then(({data}:{data:ITodoItem[]})=>{
+            setTodos(data)
+        })
+    }
+
+    useEffect(()=>{
+        getTodos()
+    },[])
 console.log(todos)
     return (
         <div>
